@@ -1,2 +1,71 @@
-<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tafelbilder</title>
-<body style="font:24px system-ui;margin:40px"><h1>Tafelbilder</h1><p><a href="perlen-motiv/">WG 3: Mein Perlen-Motiv</a></p><p><a href="pappmache/">WG 4: Pappmaché-Grundkörper</a></p><p><a href="pappmache-2/">WG 4: Pappmaché kaschieren</a></p><p><a href="kerzenhalter/">WG 4: Kerzenhalter-Würfel</a></p>
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GitHub-Tafelbild</title>
+<style>
+  body{margin:0;background:#FFFDF7;color:#0F2B28;font:24px/1.3 Onest,Arial,sans-serif}
+  main{max-width:900px;margin:0 auto;padding:32px 16px}
+  h1{font-size:44px;margin:0 0 24px}
+  h2{font-size:22px;margin:32px 0 8px}
+  a{display:block;padding:18px 20px;margin:0 0 10px;border-radius:12px;background:#F3EADB;color:inherit;text-decoration:none;font-weight:600}
+  #oben a{background:#FF8A5B}
+  a span{font-weight:400;margin-right:12px}
+</style>
+<main>
+  <h1>Tafelbilder</h1>
+  <div id="oben"></div>
+  <h2>Alle</h2>
+  <a href="perlen-motiv/">WG 3: Mein Perlen-Motiv</a>
+  <a href="pappmache/">WG 4: Pappmaché-Grundkörper</a>
+  <a href="pappmache-2/">WG 4: Pappmaché kaschieren</a>
+  <a href="kerzenhalter/">WG 4: Kerzenhalter-Würfel</a>
+</main>
+<script>
+// Stundenautomatik. Neue Stunde: eine Zeile ergänzen (Datum, Beginn, Ende, Ordner).
+// Der Ordner muss oben in der Liste „Alle“ als Link stehen.
+const PLAN = [
+  ["2026-11-09", "09:45", "11:15", "perlen-motiv"],
+  ["2026-11-09", "11:30", "13:00", "pappmache-2"],
+  ["2026-11-09", "14:00", "15:30", "kerzenhalter"],
+  ["2026-11-13", "11:30", "13:00", "pappmache-2"],
+];
+const VORLAUF_MIN = 30;  // so viele Minuten vor Beginn geht das Tafelbild schon auf
+
+const q = new URLSearchParams(location.search);
+const jetzt = q.has("zeit") ? new Date(q.get("zeit")) : new Date();  // ?zeit=2026-11-09T11:40 nur zum Testen
+const plan = PLAN
+  .map(([d, a, e, o]) => ({d, von: new Date(d + "T" + a), bis: new Date(d + "T" + e), a, o}))
+  .sort((x, y) => x.von - y.von);
+plan.forEach((s, i) => {
+  // Vorlauf reicht nie in die Stunde davor hinein
+  s.ab = Math.max(s.von - VORLAUF_MIN * 60000, i ? plan[i - 1].bis.getTime() : 0);
+});
+
+const heuteStr = jetzt.getFullYear() + "-" + String(jetzt.getMonth() + 1).padStart(2, "0") + "-" + String(jetzt.getDate()).padStart(2, "0");
+const heute = plan.filter(s => s.d === heuteStr);
+const naechste = plan.find(s => s.von > jetzt);
+const zeigen = heute.length ? heute : (naechste ? [naechste] : []);
+const titel = o => document.querySelector('main > a[href="' + o + '/"]').textContent;
+const tag = s => s.von.toLocaleDateString("de-DE", {weekday: "short", day: "2-digit", month: "2-digit"});
+const oben = document.getElementById("oben");
+if (zeigen.length) {
+  const h = document.createElement("h2");
+  h.textContent = heute.length ? "Heute" : "Als Nächstes";
+  oben.append(h);
+  for (const s of zeigen) {
+    const l = document.createElement("a"), z = document.createElement("span");
+    l.href = s.o + "/";
+    z.textContent = (heute.length ? "" : tag(s) + ", ") + s.a;
+    l.append(z, titel(s.o));
+    oben.append(l);
+  }
+}
+
+const aktuell = plan.find(s => jetzt >= s.ab && jetzt <= s.bis);
+const nav = performance.getEntriesByType("navigation")[0];
+const zurueck = nav && nav.type === "back_forward";  // Browser-Zurück führt zur Liste, nicht wieder ins Tafelbild
+if (q.has("liste")) history.replaceState(null, "", location.pathname);  // saubere Adresse fürs Lesezeichen
+else if (aktuell && !zurueck) location.href = aktuell.o + "/";
+</script>
+</html>
