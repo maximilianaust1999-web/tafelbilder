@@ -70,7 +70,7 @@ body.bearb .ed{outline:3px dashed var(--fach);outline-offset:4px;cursor:text}bod
 #uhr button{width:88px;height:88px;font:400 36px 'Luckiest Guy';background:#fff;color:var(--tinte)}
 #leiste{position:absolute;right:48px;bottom:30px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:522px;z-index:9}  /* 19.10.: 5 Spalten, sonst schiebt „Bewegen“ eine 3. Reihe über Schritt 3 */
 #leiste button{height:66px;font:400 21px 'Patrick Hand SC';padding:0 2px;background:rgba(15,43,40,.75);color:#fff}
-#leiste #musik.an{background:var(--koralle);color:var(--tinte)}#musikR{display:none;position:absolute;left:480px;top:832px;width:522px;height:58px;align-items:center;gap:14px;padding:0 20px;box-sizing:border-box;background:rgba(15,43,40,.88);color:#fff;font:400 22px 'Patrick Hand SC';z-index:9}#musikR.an{display:flex}#musikR input{flex:1;height:34px;accent-color:var(--koralle)}
+#leiste #musik.an{background:var(--koralle);color:var(--tinte)}#musikR{display:none;position:absolute;left:480px;top:832px;width:760px;height:58px;align-items:center;gap:14px;padding:0 20px;box-sizing:border-box;background:rgba(15,43,40,.88);color:#fff;font:400 22px 'Patrick Hand SC';z-index:9}#musikR.an{display:flex}#musikR select{height:44px;font:400 22px 'Patrick Hand SC';padding:0 8px;background:#fff;color:var(--tinte);border:0}#musikR input{flex:1;height:34px;accent-color:var(--koralle)}
 #leiste #weiter{background:var(--fach);font:400 34px 'Luckiest Guy';padding-top:6px}#leiste #stift.an{background:var(--koralle);color:var(--tinte)}
 #leiste{grid-template-columns:repeat(5,1fr)}#buehne{background:#fff!important}h1{color:#FF8A5B!important;-webkit-text-stroke:4px #0F2B28!important;paint-order:stroke fill!important;text-shadow:2px 2px 0 #0F2B28,3px 3px 0 #0F2B28,5px 5px 0 #0F2B28,6px 6px 0 #0F2B28,8px 8px 0 #0F2B28,10px 14px 16px rgba(15,43,40,.18)!important}.band{transform:none!important;background:#FFD2BF!important;color:#0F2B28!important;border-radius:40px;padding:8px 22px!important}#ablauf button{border-radius:40px}#ablauf button.jetzt{background:#F29A78!important;color:#0F2B28!important}#ablauf .knopf{background:#FFB89B!important;color:#0F2B28!important;border-radius:40px}.karte{background:transparent!important;border:0!important;box-shadow:none!important}.karte img{border-radius:50%;background:radial-gradient(circle,#FFF1EA 0 62%,rgba(255,255,255,0) 63%)!important;padding:10px}.karte .nr,.akarte .nr{background:radial-gradient(circle at 34% 30%,#fff 0 8%,#FFD2BF 40%,#F29A78 100%)!important;color:#0F2B28!important;border:3px solid #0F2B28;box-shadow:0 4px 10px rgba(15,43,40,.25)}#schritte.fokus .karte.jetzt{border:0!important}#schritte.fokus .karte.jetzt img{background:radial-gradient(circle,#FFD2BF 0 62%,rgba(255,255,255,0) 63%)!important}.akarte{background:transparent!important;border:0!important}.akarte img{background:radial-gradient(circle,#FFF1EA 0 46%,rgba(255,255,255,0) 47%)!important}.motiv{transform:none!important;box-shadow:none!important;background:radial-gradient(circle at 50% 45%,#FFF1EA 0 30%,rgba(255,255,255,0) 31%)!important}.zettel{transform:none!important;background:#FFE6DA!important;border-radius:28px}.streifen{border:0!important;background:#FFF1EA!important;border-radius:24px}#uhr{border-radius:28px;background:#F29A78!important;color:#0F2B28!important}#uhr button{border-radius:20px}#leiste button{border-radius:22px}#leiste #weiter{background:#E8805A!important;color:#0F2B28!important}.feld{border-radius:28px}#alleS,#vorlagen{background:#fff!important}
 #mal{position:absolute;inset:0;z-index:8;pointer-events:none}#mal.an{pointer-events:auto;cursor:crosshair}
@@ -1204,11 +1204,12 @@ function musikMedian(von, bis) { const w = musikT.filter(x =&gt; x[0] &gt;= von 
 function ohneMusik(db) { if (!musikAn || musikP &lt;= 0) return db; return 10 * Math.log10(Math.max(dbZuP(db) - 1.4 * musikP, dbZuP(S.basis))); }  // 1.4 = Sicherheit, weil die Klänge leicht schwanken
 function musikMessen(vor) { clearTimeout(musikTimer); stummBis = Math.max(stummBis, performance.now() + 6500);
   musikTimer = setTimeout(() =&gt; { const t = performance.now(), nach = musikMedian(t - 3000, t); musikP = vor === null || nach === null ? 0 : Math.max(0, dbZuP(nach) - dbZuP(vor)); }, 6000); }
-function musikDip() { if (!musikAn || window.parent === window) return; window.parent.postMessage({lm: &#x27;musik&#x27;, art: &#x27;dip&#x27;}, &#x27;*&#x27;); clearTimeout(musikTimer); stummBis = Math.max(stummBis, performance.now() + 10000);
+function musikDip(ohnePost) { if (!musikAn || window.parent === window) return; if (!ohnePost) window.parent.postMessage({lm: &#x27;musik&#x27;, art: &#x27;dip&#x27;}, &#x27;*&#x27;); clearTimeout(musikTimer); stummBis = Math.max(stummBis, performance.now() + 10000);
   musikTimer = setTimeout(() =&gt; { const t = performance.now(); musikMessen(musikMedian(t - 1700, t)); }, 3300); }  // Monster nach der Musik gestartet: Musik kurz weg, Raum messen
 window.addEventListener(&#x27;message&#x27;, e =&gt; { const d = e.data; if (e.source !== window.parent || !d || d.lm !== &#x27;musik&#x27;) return;
   if (d.art === &#x27;an&#x27;) { musikAn = true; musikG = d.g; musikP = 0; const t = performance.now(); musikMessen(musikMedian(t - 2500, t)); }
   else if (d.art === &#x27;aus&#x27;) { clearTimeout(musikTimer); musikAn = false; musikP = 0; stummBis = Math.max(stummBis, performance.now() + 3000); }
+  else if (d.art === &#x27;neu&#x27;) { musikP = 0; musikDip(true); }
   else if (d.art === &#x27;g&#x27; &amp;&amp; musikG &gt; 0) { musikP *= (d.g / musikG) * (d.g / musikG); musikG = d.g; }
   meter(); });
 function takt() {
@@ -1587,7 +1588,7 @@ window.LM = {musikStand: () =&gt; ({musikAn, musikP, lvl, thr: schwelle()}), mes
 
 <div class="feld" id="sicherung"><span class="label">Das haben wir gelernt</span><span class="k">Gelernt:</span><div class="inhalt"><div class="streifen"><span class="sw">stauchen</span><span class="sz">Stauchen heißt: Ich stoße die Masse fest auf den Tisch.</span></div></div></div>
 <div id="leiste"><button id="zur">zurück</button><button id="stift">Stift</button><button id="leer">Stift weg</button><button id="weiter">weiter</button><button id="neu">neu</button><button id="bearb">Bearbeiten</button><button id="orig">Original</button><button id="beweg">Bewegen</button><button id="voll">Vollbild</button><button id="musik">Musik</button></div>
-<div id="musikR"><span>Musik leise</span><input type="range" min="0.1" max="1" step="0.05" aria-label="Lautstärke der Musik"><span>laut</span></div>
+<div id="musikR"><select aria-label="Musik wählen"><option value="klavier">Ruhiges Klavier</option><option value="gitarre">Sanfte Gitarre</option><option value="ambient">Ambient</option><option value="pad">Klangteppich</option><option value="wellen">Meeresrauschen</option><option value="bach">Bach</option><option value="regen">Regen</option></select><span>leise</span><input type="range" min="0.1" max="1" step="0.05" aria-label="Lautstärke der Musik"><span>laut</span></div>
 <input type="file" id="datei" accept="image/*" hidden>
 <canvas id="mal" width="1920" height="1080"></canvas>
 <div id="lupe"><img><div></div></div><div id="schwarz"></div>
@@ -1617,22 +1618,20 @@ AB.forEach(b=>b.onclick=()=>{if(bearb)return;const a=+b.dataset.a;ablauf(a);cons
 const M=$('#monster');M.querySelector('.deckel').onclick=()=>M.classList.add('gross');$('#monsterZu').onclick=()=>M.classList.remove('gross');
 const FI=$('#film'),V=FI.querySelector('video');function film(){if(bearb||!V)return;FI.classList.add('an');V.currentTime=0;V.play().catch(()=>{})}
 if($('#filmBtn'))$('#filmBtn').onclick=film;FI.querySelector('button').onclick=()=>{V&&V.pause();FI.classList.remove('an')};if(V)V.onended=()=>FI.classList.remove('an');
-// 09.11.2026 (Maxi): Entspannungsmusik, im Browser erzeugt (offline, ohne Anmeldung); das Monster bekommt Bescheid und zieht ihren Pegel ab
-const MUS=(()=>{const B=$('#musik'),R=$('#musikR'),S=R.querySelector('input'),IF=$('#monster iframe');let c,m,pad,echo,an=false,dip=1,vid=1,z1,z2,zr,ak=0,g=.5;
-try{g=+localStorage.getItem('tafelMusik')||.5}catch(e){}S.value=g;
-const AK=[[110,164.81,246.94,261.63],[87.31,174.61,220,329.63],[130.81,196,293.66,329.63],[98,196,246.94,293.66]],PERL=[440,493.88,587.33,659.25,783.99];
+// 09.11.2026 (Maxi): Entspannungsmusik aus freien Aufnahmen (Ordner musik/ auf GitHub Pages); das Monster bekommt Bescheid und zieht den Pegel ab
+const MUS=(()=>{const B=$('#musik'),R=$('#musikR'),S=R.querySelector('input'),W=R.querySelector('select'),IF=$('#monster iframe'),A=new Audio(),BASIS=['../musik/','https://maximilianaust1999-web.github.io/tafelbilder/musik/'];let an=false,dip=1,vid=1,g=.7,v=0,bi=0,wartet=false,dz;
+A.loop=true;A.preload='none';A.volume=0;try{g=+localStorage.getItem('tafelMusik2')||.7;const w=localStorage.getItem('tafelMusikStueck');if(w&&[...W.options].some(o=>o.value===w))W.value=w}catch(e){}S.value=g;
 const melde=(art)=>{try{IF.contentWindow.postMessage({lm:'musik',art,g},'*')}catch(e){}};
-function setze(tc){if(!m)return;const n=c.currentTime;m.gain.cancelScheduledValues(n);m.gain.setTargetAtTime(an?1.8*g*dip*vid:0,n,tc||.7)}
-function ton(f,art,pegel,t0,a,h,r,ziel){const o=c.createOscillator(),e=c.createGain();o.type=art;o.frequency.value=f;o.connect(e);e.connect(ziel);e.gain.setValueAtTime(0,t0);e.gain.linearRampToValueAtTime(pegel,t0+a);e.gain.setValueAtTime(pegel,t0+a+h);e.gain.linearRampToValueAtTime(0,t0+a+h+r);o.start(t0);o.stop(t0+a+h+r+.1)}
-function akkord(){if(!an)return;const n=c.currentTime+.05;AK[ak++%4].forEach(f=>{ton(f,'sine',.06,n,8,5,8,pad);ton(f*1.003,'triangle',.016,n,8,5,8,pad)});z1=setTimeout(akkord,13000)}
-function perle(){if(!an)return;ton(PERL[Math.floor(Math.random()*5)],'sine',.022,c.currentTime+.05,.5,0,3.5,echo);z2=setTimeout(perle,5000+Math.random()*4000)}
-function bau(){c=new (window.AudioContext||window.webkitAudioContext)();m=c.createGain();m.gain.value=0;m.connect(c.destination);pad=c.createBiquadFilter();pad.type='lowpass';pad.frequency.value=1100;pad.connect(m);echo=c.createGain();const d=c.createDelay(2),f=c.createGain();d.delayTime.value=.62;f.gain.value=.38;echo.connect(m);echo.connect(d);d.connect(f);f.connect(d);d.connect(m)}
-function zeigeR(){clearTimeout(zr);R.classList.toggle('an',an);if(an)zr=setTimeout(()=>R.classList.remove('an'),8000)}
-function schalte(){if(!c)bau();if(c.state==='suspended')c.resume();an=!an;B.classList.toggle('an',an);zeigeR();clearTimeout(z1);clearTimeout(z2);setze(an?.8:.5);if(an){akkord();z2=setTimeout(perle,4000)}melde(an?'an':'aus')}
+setInterval(()=>{const z=an?g*dip*vid:0;v+=(z-v)*.1;if(Math.abs(z-v)<.004)v=z;A.volume=Math.max(0,Math.min(1,v));if(!an&&v===0&&!A.paused)A.pause()},50);
+function lade(){bi=0;A.src=BASIS[0]+W.value+'.mp3';A.play().catch(()=>{})}
+A.addEventListener('error',()=>{if(!an)return;if(++bi<BASIS.length){A.src=BASIS[bi]+W.value+'.mp3';A.play().catch(()=>{})}else{an=false;wartet=false;B.classList.remove('an');R.classList.remove('an');melde('aus');B.textContent='kein Netz';setTimeout(()=>B.textContent='Musik',4000)}});
+A.addEventListener('playing',()=>{if(wartet){wartet=false;melde('an')}});
+function schalte(){an=!an;B.classList.toggle('an',an);R.classList.toggle('an',an);if(an){wartet=true;dip=1;if(A.src)A.play().catch(()=>{});else lade()}else{wartet=false;melde('aus')}}
 B.onclick=()=>{if(!bearb)schalte()};
-S.oninput=()=>{g=+S.value;zeigeR();setze(.15);melde('g');try{localStorage.setItem('tafelMusik',g)}catch(e){}};
-addEventListener('message',e=>{if(e.source===IF.contentWindow&&e.data&&e.data.lm==='musik'&&e.data.art==='dip'&&an){dip=0;setze(.25);setTimeout(()=>{dip=1;setze(.6)},3500)}});
-if(V){V.addEventListener('play',()=>{vid=0;setze(.3)});V.addEventListener('pause',()=>{vid=1;setze(.8)})}
+S.oninput=()=>{g=+S.value;melde('g');try{localStorage.setItem('tafelMusik2',g)}catch(e){}};
+W.onchange=()=>{try{localStorage.setItem('tafelMusikStueck',W.value)}catch(e){}if(!an){A.removeAttribute('src');return}dip=0;melde('neu');clearTimeout(dz);dz=setTimeout(()=>{lade();dip=1},3500)};
+addEventListener('message',e=>{if(e.source===IF.contentWindow&&e.data&&e.data.lm==='musik'&&e.data.art==='dip'&&an){dip=0;clearTimeout(dz);dz=setTimeout(()=>{dip=1},3500)}});
+if(V){V.addEventListener('play',()=>{vid=0});V.addEventListener('pause',()=>{vid=1})}
 return {schalte}})();
 const UE=$('#uebung'),UF=UE.querySelector('iframe');function uebung(){if(bearb||!UF.dataset.src)return;if(!UF.src)UF.src=UF.dataset.src;UE.classList.add('an')}
 if($('#uebBtn'))$('#uebBtn').onclick=uebung;UE.querySelector('button').onclick=()=>UE.classList.remove('an');
