@@ -10,9 +10,13 @@ main{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;padding:0 40px}
 .card svg{height:26vh;width:100%}
 .n{position:absolute;top:10px;left:12px;width:48px;height:48px;border-radius:50%;background:var(--acc);color:#fff;font-weight:800;font-size:28px;display:grid;place-items:center}
 h2{margin:6px 0;font-size:34px}p{margin:0;font-size:26px;line-height:1.3}
-footer{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:16px 40px 24px}
+footer{display:grid;grid-template-columns:1.2fr 1fr 23vw;align-items:stretch;gap:16px;padding:16px 40px 24px}
 .box{background:var(--soft);border-radius:22px;padding:16px 24px;font-size:30px}.box h3{margin:0 0 6px;font-size:34px}
 .box ul{margin:0;padding-left:28px;columns:3}.tip{background:#fff3d6}
+#monster{position:relative;width:100%;aspect-ratio:16/9;border-radius:24px;overflow:hidden;background:#000;box-shadow:0 2px 0 #e7e3d6,0 14px 30px #14231f1f;cursor:zoom-in;align-self:end}
+#monster iframe{width:1920px;height:1080px;border:0;transform-origin:0 0;position:absolute;left:0;top:0}#monster .deckel{position:absolute;inset:0}
+#monster.gross{position:fixed;left:0;top:0;width:100vw;height:100vh;aspect-ratio:auto;border-radius:0;z-index:30;cursor:default}#monster.gross .deckel{display:none}
+#zu{display:none;position:fixed;right:24px;top:20px;z-index:31;font:inherit;font-size:24px;padding:12px 22px;border:0;border-radius:14px;background:#14231f;color:#fff;cursor:pointer}#zu.an{display:block}
 </style>
 <header><div><h1>Waldtiere <span>wickeln</span></h1><div class="sub">Heute: ein Waldtier aus Wolle</div></div><a class="btn" href="video.html">▶ Video</a></header>
 <main>
@@ -23,6 +27,11 @@ footer{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:16px 40px 2
 <section class="card"><div class="n">5</div><svg viewBox="0 0 800 560"><use href="#t" fill="#e8923a"/><g id="w"></g></svg><h2>Wickeln</h2><p>Eng nebeneinander. Kein Karton sichtbar.</p></section>
 </main>
 <footer><div class="box"><h3>Das brauchst du</h3><ul><li>Waldtier-Vorlage</li><li>Karton</li><li>Schere</li><li>Kleber</li><li>Tesafilm</li><li>Wolle</li><li>Stifte</li></ul></div>
-<div class="box tip"><h3>Tipp</h3>Nicht zu fest ziehen: dann wird es flauschig.</div></footer>
+<div class="box tip"><h3>Tipp</h3>Nicht zu fest ziehen: dann wird es flauschig.</div>
+<div id="monster"><iframe src="laerm-monster.html" allow="microphone; autoplay" title="Lärm-Monster"></iframe><div class="deckel" title="Lärm-Monster groß"></div></div></footer><button id="zu">zurück zum Tafelbild</button>
 <svg width="0" height="0" style="position:absolute"><defs><g id="t"><path d="M310 140 L330 70 L375 120 Q400 112 425 120 L470 70 L490 140 Q505 190 490 250 L310 250 Q295 190 310 140Z" stroke="#2b2a33" stroke-width="6"/><path d="M300 250 Q290 470 310 520 L490 520 Q510 470 500 250 Z" stroke="#2b2a33" stroke-width="6"/><path d="M330 215 Q400 170 470 215 L400 262Z" fill="#fff" stroke="#2b2a33" stroke-width="5"/><circle cx="360" cy="195" r="11" fill="#2b2a33"/><circle cx="440" cy="195" r="11" fill="#2b2a33"/><ellipse cx="400" cy="250" rx="12" ry="9" fill="#2b2a33"/></g></defs></svg>
-<script>let s='';for(let i=0;i<22;i++)s+=`<rect x="${292+(i%3)*2}" y="${512-i*11.5}" width="${216-(i%2)*4}" height="15" rx="7" fill="${i%2?'#d0602a':'#e0722f'}" stroke="#b04a1c" stroke-width="1.5"/>`;document.getElementById('w').innerHTML=s</script></html>
+<script>const MO=document.getElementById('monster'),IF=MO.querySelector('iframe'),ZU=document.getElementById('zu');
+const fit=()=>{IF.style.transform='scale('+MO.clientWidth/1920+') ';IF.style.transform='scale('+Math.min(MO.clientWidth/1920,MO.clientHeight/1080)+')'};
+const gr=an=>{MO.classList.toggle('gross',an);ZU.classList.toggle('an',an);fit()};
+MO.querySelector('.deckel').onclick=()=>gr(true);ZU.onclick=()=>gr(false);addEventListener('resize',fit);addEventListener('keydown',e=>{if(e.key=='Escape')gr(false)});fit();
+let s='';for(let i=0;i<22;i++)s+=`<rect x="${292+(i%3)*2}" y="${512-i*11.5}" width="${216-(i%2)*4}" height="15" rx="7" fill="${i%2?'#d0602a':'#e0722f'}" stroke="#b04a1c" stroke-width="1.5"/>`;document.getElementById('w').innerHTML=s</script></html>
