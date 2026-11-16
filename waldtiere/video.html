@@ -1,0 +1,56 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Waldtiere wickeln</title>
+<style>
+:root{--bg:#faf6ee;--ink:#2b2a33;--acc:#d9772b}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;display:flex;flex-direction:column}
+#top{display:flex;align-items:center;gap:24px;padding:18px 40px}
+#num{flex:none;width:90px;height:90px;border-radius:50%;background:var(--acc);color:#fff;font-size:56px;font-weight:800;display:grid;place-items:center}
+#cap{font-size:60px;font-weight:700;line-height:1.1}#sub{font-size:36px;opacity:.75;margin-top:6px}
+#stage{flex:1;display:grid;place-items:center;min-height:0}svg{height:100%;max-width:100%}
+#mat{font-size:30px;padding:8px 40px 14px;opacity:.8}#bar{height:14px;background:#e8dfcf}#bar i{display:block;height:100%;width:0;background:var(--acc)}
+button{position:fixed;right:20px;top:14px;font:inherit;font-size:22px;padding:10px 18px;border:0;border-radius:12px;background:var(--ink);color:#fff;cursor:pointer;opacity:.5}
+.fx{transition:all 1.6s ease}
+</style>
+<div id="top"><div id="num">1</div><div><div id="cap"></div><div id="sub"></div></div></div>
+<div id="stage"><svg id="s" viewBox="0 0 800 560"></svg></div><a href="./" style="position:fixed;right:20px;top:60px;font-size:22px;padding:10px 18px;border-radius:12px;background:#2b2a33;color:#fff;text-decoration:none;opacity:.6">← Tafelbild</a><div id="mat">Das brauchst du: Waldtier-Vorlage · Karton · Schere · Kleber · Tesafilm · Wolle · Stifte</div><div id="bar"><i id="p"></i></div>
+<button onclick="go(0)">Neu starten</button>
+<script>
+const NS='http://www.w3.org/2000/svg',s=document.getElementById('s');
+const body='M300 250 Q290 470 310 520 L490 520 Q510 470 500 250 Z';
+const head='<path d="M310 140 L330 70 L375 120 Q400 112 425 120 L470 70 L490 140 Q505 190 490 250 L310 250 Q295 190 310 140Z"';
+const face='<path d="M330 215 Q400 170 470 215 L400 262Z" fill="#fff" stroke="#2b2a33" stroke-width="5"/><circle cx="360" cy="195" r="11" fill="#2b2a33"/><circle cx="440" cy="195" r="11" fill="#2b2a33"/><ellipse cx="400" cy="250" rx="12" ry="9" fill="#2b2a33"/>';
+const tier=(fill)=>`<g>${head} fill="${fill}" stroke="#2b2a33" stroke-width="6"/><path d="${body}" fill="${fill=='#fff'?'#fff':fill}" stroke="#2b2a33" stroke-width="6" id="bd"/>${face}</g>`;
+const scenes=[
+{t:'Ausmalen',d:'Male das Waldtier bunt an.',h:()=>`<rect x="260" y="50" width="280" height="500" rx="8" fill="#fff" stroke="#999" stroke-width="4"/>
+<g clip-path="url(#c)">${tier('#fff')}</g><defs><clipPath id="c"><rect id="cr" x="250" y="560" width="300" height="0"/></clipPath></defs>
+<g id="fill" clip-path="url(#c2)"><path d="${body}" fill="#e8923a"/>${head} fill="#e8923a"/>${face}</g><defs><clipPath id="c2"><rect id="cr2" x="250" y="540" width="300" height="0"/></clipPath></defs>
+<g id="pen" transform="translate(560,300)"><rect x="0" y="0" width="150" height="26" rx="6" fill="#e0a64a" transform="rotate(-35)"/></g>`,
+ a:()=>{const r=document.getElementById('cr2'),pn=document.getElementById('pen');r.style.transition='all 3s linear';pn.style.transition='all 3s linear';requestAnimationFrame(()=>{r.setAttribute('y','50');r.setAttribute('height','490');pn.setAttribute('transform','translate(430,100)')})}},
+{t:'Auf Karton kleben',d:'Das Waldtier kommt auf den Karton.',h:()=>`<rect x="230" y="70" width="320" height="470" rx="8" fill="#b9a687" stroke="#8a7a5c" stroke-width="4"/>
+<g id="pap" class="fx" transform="translate(-300,0)"><rect x="255" y="60" width="270" height="480" fill="#fff" stroke="#999" stroke-width="3"/>${tier('#e8923a')}</g>
+<text x="400" y="560" text-anchor="middle" font-size="26" fill="#8a7a5c">Karton</text>`,
+ a:()=>{const e=document.getElementById('pap');requestAnimationFrame(()=>e.setAttribute('transform','translate(0,0)'))}},
+{t:'Ausschneiden',d:'Schneide genau am Rand entlang.',h:()=>`<rect x="230" y="40" width="340" height="500" fill="#b9a687" opacity=".6"/>
+<g>${tier('#e8923a')}</g>
+<g id="sc" transform="translate(300,520)"><path d="M0 0 L60 -30 M0 0 L60 30" stroke="#444" stroke-width="10" stroke-linecap="round"/><circle cx="-12" cy="-14" r="16" fill="none" stroke="#444" stroke-width="7"/><circle cx="-12" cy="14" r="16" fill="none" stroke="#444" stroke-width="7"/></g>`,
+ a:()=>{const e=document.getElementById('sc');e.style.transition='all 3.2s linear';requestAnimationFrame(()=>e.setAttribute('transform','translate(330,150)'))}},
+{t:'Hinten: Faden festkleben',d:'Zuerst: Wollfaden hinten mit Tesafilm festkleben.',h:()=>`<path d="${body}" fill="#c9b48e" stroke="#2b2a33" stroke-width="6"/>${head} fill="#c9b48e" stroke="#2b2a33" stroke-width="6"/>
+<text x="400" y="400" text-anchor="middle" font-size="30" fill="#6a5a3c">Rückseite</text>
+<path id="w0" d="M300 505 Q220 520 200 560" fill="none" stroke="#e8923a" stroke-width="12" stroke-linecap="round"/>
+<rect id="tape" x="270" y="480" width="120" height="44" rx="4" fill="#cfe9f5" stroke="#8cbcd6" stroke-width="3" opacity="0" class="fx" transform="rotate(-8 330 500)"/>
+<text id="tt" x="520" y="470" font-size="30" fill="#3a7ca5" opacity="0" class="fx">Tesafilm</text>`,
+ a:()=>{setTimeout(()=>{document.getElementById('tape').setAttribute('opacity','.9');document.getElementById('tt').setAttribute('opacity','1')},900)}},
+{t:'Wickeln',d:'Wolle um das Tier wickeln. Eng nebeneinander, nicht zu fest.',h:()=>`<g>${tier('#e8923a')}</g><g id="wool"></g>`,
+ a:()=>{const g=document.getElementById('wool');let y=520,i=0;const iv=setInterval(()=>{if(y<290){clearInterval(iv);return}
+ const r=document.createElementNS(NS,'rect');r.setAttribute('x',292+Math.random()*4);r.setAttribute('width',216-Math.random()*6);r.setAttribute('y',y-9);r.setAttribute('height',15);r.setAttribute('rx',7);r.setAttribute('fill',i%2?'#d0602a':'#e0722f');r.setAttribute('stroke','#b04a1c');r.setAttribute('stroke-width',1.5);g.appendChild(r);y-=11;i++},200)}},
+{t:'So wickelst du richtig',d:'Dicht nebeneinander. Der Karton darf nicht durchschauen.',h:()=>{const mk=(gap,x)=>{let st='';for(let i=0;i*gap<230;i++)st+=`<rect x="292" y="${512-i*gap}" width="216" height="${gap>14?9:15}" rx="5" fill="#e0722f" stroke="#b04a1c" stroke-width="1.5"/>`;return `<g transform="translate(${x},70) scale(.72)"><g>${tier('#e8923a')}</g><rect x="292" y="282" width="216" height="240" fill="#e9dcc0"/>${st}</g>`};
+ return mk(30,-120)+mk(11.5,250)+'<text x="150" y="505" text-anchor="middle" font-size="40" fill="#c0392b" font-weight="700">✗ Lücken</text><text x="570" y="505" text-anchor="middle" font-size="40" fill="#2e8b57" font-weight="700">✓ dicht</text>'},a:()=>{}},
+{t:'Fertig!',d:'Alles bedeckt. Locker gewickelt, schön flauschig.',h:()=>`<g>${tier('#e8923a')}</g><g>${Array.from({length:22},(_,i)=>`<rect x="${292+(i%3)*2}" y="${512-i*11.5}" width="${216-(i%2)*4}" height="15" rx="7" fill="${i%2?'#d0602a':'#e0722f'}" stroke="#b04a1c" stroke-width="1.5"/>`).join('')}</g>
+<text x="620" y="180" font-size="70">✨</text><text x="130" y="300" font-size="60">✨</text>`,a:()=>{}}
+];
+const DUR=[4200,3200,4200,3600,6500,4500,3500];let cur=0,timer,t0;
+function go(i){clearTimeout(timer);cur=i%scenes.length;const sc=scenes[cur];s.innerHTML=sc.h();
+ document.getElementById('num').textContent=cur<5?cur+1:(cur==5?'!':'✓');document.getElementById('cap').textContent=sc.t;document.getElementById('sub').textContent=sc.d;
+ sc.a();const p=document.getElementById('p');p.style.transition='none';p.style.width='0';requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.transition='width '+DUR[cur]+'ms linear';p.style.width='100%'}));
+ timer=setTimeout(()=>go(cur+1),DUR[cur]+500)}
+go(0);
+</script></html>

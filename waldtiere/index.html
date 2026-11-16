@@ -1,54 +1,28 @@
 <!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Waldtiere wickeln</title>
 <style>
-:root{--bg:#faf6ee;--ink:#2b2a33;--acc:#d9772b}
-*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;display:flex;flex-direction:column}
-#top{display:flex;align-items:center;gap:24px;padding:18px 40px}
-#num{flex:none;width:90px;height:90px;border-radius:50%;background:var(--acc);color:#fff;font-size:56px;font-weight:800;display:grid;place-items:center}
-#cap{font-size:60px;font-weight:700;line-height:1.1}#sub{font-size:36px;opacity:.75;margin-top:6px}
-#stage{flex:1;display:grid;place-items:center;min-height:0}svg{height:100%;max-width:100%}
-#mat{font-size:30px;padding:8px 40px 14px;opacity:.8}#bar{height:14px;background:#e8dfcf}#bar i{display:block;height:100%;width:0;background:var(--acc)}
-button{position:fixed;right:20px;bottom:30px;font:inherit;font-size:22px;padding:10px 18px;border:0;border-radius:12px;background:var(--ink);color:#fff;cursor:pointer;opacity:.5}
-.fx{transition:all 1.6s ease}
+:root{--bg:#faf6ee;--ink:#2b2a33;--acc:#d9772b;--soft:#e8dfcf}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;min-height:100vh}
+header{padding:20px 40px;display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:54px;letter-spacing:-1px}h1 span{color:var(--acc)}.sub{font-size:26px;opacity:.7}
+.btn{font:inherit;font-size:30px;font-weight:700;padding:14px 28px;border-radius:16px;background:var(--acc);color:#fff;text-decoration:none}
+main{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;padding:0 40px}
+.card{background:#fff;border-radius:22px;padding:16px;box-shadow:0 2px 12px #0001;position:relative;text-align:center}
+.card svg{height:26vh;width:100%}
+.n{position:absolute;top:10px;left:12px;width:48px;height:48px;border-radius:50%;background:var(--acc);color:#fff;font-weight:800;font-size:28px;display:grid;place-items:center}
+h2{margin:6px 0;font-size:34px}p{margin:0;font-size:26px;line-height:1.3}
+footer{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:16px 40px 24px}
+.box{background:var(--soft);border-radius:22px;padding:16px 24px;font-size:30px}.box h3{margin:0 0 6px;font-size:34px}
+.box ul{margin:0;padding-left:28px;columns:3}.tip{background:#fff3d6}
 </style>
-<div id="top"><div id="num">1</div><div><div id="cap"></div><div id="sub"></div></div></div>
-<div id="stage"><svg id="s" viewBox="0 0 800 560"></svg></div><div id="mat">Das brauchst du: Waldtier-Vorlage · Karton · Schere · Kleber · Tesafilm · Wolle · Stifte</div><div id="bar"><i id="p"></i></div>
-<button onclick="go(0)">Neu starten</button>
-<script>
-const NS='http://www.w3.org/2000/svg',s=document.getElementById('s');
-const body='M300 250 Q290 470 310 520 L490 520 Q510 470 500 250 Z';
-const head='<path d="M310 140 L330 70 L375 120 Q400 112 425 120 L470 70 L490 140 Q505 190 490 250 L310 250 Q295 190 310 140Z"';
-const face='<path d="M330 215 Q400 170 470 215 L400 262Z" fill="#fff" stroke="#2b2a33" stroke-width="5"/><circle cx="360" cy="195" r="11" fill="#2b2a33"/><circle cx="440" cy="195" r="11" fill="#2b2a33"/><ellipse cx="400" cy="250" rx="12" ry="9" fill="#2b2a33"/>';
-const tier=(fill)=>`<g>${head} fill="${fill}" stroke="#2b2a33" stroke-width="6"/><path d="${body}" fill="${fill=='#fff'?'#fff':fill}" stroke="#2b2a33" stroke-width="6" id="bd"/>${face}</g>`;
-const scenes=[
-{t:'Ausmalen',d:'Male das Waldtier bunt an.',h:()=>`<rect x="260" y="50" width="280" height="500" rx="8" fill="#fff" stroke="#999" stroke-width="4"/>
-<g clip-path="url(#c)">${tier('#fff')}</g><defs><clipPath id="c"><rect id="cr" x="250" y="560" width="300" height="0"/></clipPath></defs>
-<g id="fill" clip-path="url(#c2)"><path d="${body}" fill="#e8923a"/>${head} fill="#e8923a"/>${face}</g><defs><clipPath id="c2"><rect id="cr2" x="250" y="540" width="300" height="0"/></clipPath></defs>
-<g id="pen" transform="translate(560,300)"><rect x="0" y="0" width="150" height="26" rx="6" fill="#e0a64a" transform="rotate(-35)"/></g>`,
- a:()=>{const r=document.getElementById('cr2'),pn=document.getElementById('pen');r.style.transition='all 3s linear';pn.style.transition='all 3s linear';requestAnimationFrame(()=>{r.setAttribute('y','50');r.setAttribute('height','490');pn.setAttribute('transform','translate(430,100)')})}},
-{t:'Auf Karton kleben',d:'Das Waldtier kommt auf den Karton.',h:()=>`<rect x="230" y="70" width="320" height="470" rx="8" fill="#b9a687" stroke="#8a7a5c" stroke-width="4"/>
-<g id="pap" class="fx" transform="translate(-300,0)"><rect x="255" y="60" width="270" height="480" fill="#fff" stroke="#999" stroke-width="3"/>${tier('#e8923a')}</g>
-<text x="400" y="560" text-anchor="middle" font-size="26" fill="#8a7a5c">Karton</text>`,
- a:()=>{const e=document.getElementById('pap');requestAnimationFrame(()=>e.setAttribute('transform','translate(0,0)'))}},
-{t:'Ausschneiden',d:'Schneide genau am Rand entlang.',h:()=>`<rect x="230" y="40" width="340" height="500" fill="#b9a687" opacity=".6"/>
-<g>${tier('#e8923a')}</g>
-<g id="sc" transform="translate(300,520)"><path d="M0 0 L60 -30 M0 0 L60 30" stroke="#444" stroke-width="10" stroke-linecap="round"/><circle cx="-12" cy="-14" r="16" fill="none" stroke="#444" stroke-width="7"/><circle cx="-12" cy="14" r="16" fill="none" stroke="#444" stroke-width="7"/></g>`,
- a:()=>{const e=document.getElementById('sc');e.style.transition='all 3.2s linear';requestAnimationFrame(()=>e.setAttribute('transform','translate(330,150)'))}},
-{t:'Hinten: Faden festkleben',d:'Wollfaden hinten mit Tesafilm festkleben.',h:()=>`<path d="${body}" fill="#c9b48e" stroke="#2b2a33" stroke-width="6"/>${head} fill="#c9b48e" stroke="#2b2a33" stroke-width="6"/>
-<text x="400" y="400" text-anchor="middle" font-size="30" fill="#6a5a3c">Rückseite</text>
-<path id="w0" d="M300 505 Q220 520 200 560" fill="none" stroke="#e8923a" stroke-width="12" stroke-linecap="round"/>
-<rect id="tape" x="270" y="480" width="120" height="44" rx="4" fill="#cfe9f5" stroke="#8cbcd6" stroke-width="3" opacity="0" class="fx" transform="rotate(-8 330 500)"/>
-<text id="tt" x="520" y="470" font-size="30" fill="#3a7ca5" opacity="0" class="fx">Tesafilm</text>`,
- a:()=>{setTimeout(()=>{document.getElementById('tape').setAttribute('opacity','.9');document.getElementById('tt').setAttribute('opacity','1')},900)}},
-{t:'Wickeln',d:'Eng nebeneinander. Kein Karton darf durchschauen. Locker, nicht zu fest – dann wird es flauschig.',h:()=>`<g>${tier('#e8923a')}</g><g id="wool"></g>`,
- a:()=>{const g=document.getElementById('wool');let y=520,i=0;const iv=setInterval(()=>{if(y<290){clearInterval(iv);return}
- const r=document.createElementNS(NS,'rect');r.setAttribute('x',292+Math.random()*4);r.setAttribute('width',216-Math.random()*6);r.setAttribute('y',y-9);r.setAttribute('height',15);r.setAttribute('rx',7);r.setAttribute('fill',i%2?'#d0602a':'#e0722f');r.setAttribute('stroke','#b04a1c');r.setAttribute('stroke-width',1.5);g.appendChild(r);y-=11;i++},200)}},
-{t:'Fertig!',d:'Alles bedeckt, schön fluffig.',h:()=>`<g>${tier('#e8923a')}</g><g>${Array.from({length:22},(_,i)=>`<rect x="${292+(i%3)*2}" y="${512-i*11.5}" width="${216-(i%2)*4}" height="15" rx="7" fill="${i%2?'#d0602a':'#e0722f'}" stroke="#b04a1c" stroke-width="1.5"/>`).join('')}</g>
-<text x="620" y="180" font-size="70">✨</text><text x="130" y="300" font-size="60">✨</text>`,a:()=>{}}
-];
-const DUR=[4200,3200,4200,3600,6500,3500];let cur=0,timer,t0;
-function go(i){clearTimeout(timer);cur=i%scenes.length;const sc=scenes[cur];s.innerHTML=sc.h();
- document.getElementById('num').textContent=cur<5?cur+1:'✓';document.getElementById('cap').textContent=sc.t;document.getElementById('sub').textContent=sc.d;
- sc.a();const p=document.getElementById('p');p.style.transition='none';p.style.width='0';requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.transition='width '+DUR[cur]+'ms linear';p.style.width='100%'}));
- timer=setTimeout(()=>go(cur+1),DUR[cur]+500)}
-go(0);
-</script></html>
+<header><div><h1>Waldtiere <span>wickeln</span></h1><div class="sub">Heute: ein Waldtier aus Wolle</div></div><a class="btn" href="video.html">▶ Video</a></header>
+<main>
+<section class="card"><div class="n">1</div><svg viewBox="0 0 800 560"><use href="#t" fill="#fff"/><rect x="560" y="300" width="170" height="30" rx="8" fill="#e0a64a" transform="rotate(-38 560 300)"/></svg><h2>Ausmalen</h2><p>Male dein Tier bunt an.</p></section>
+<section class="card"><div class="n">2</div><svg viewBox="0 0 800 560"><rect x="170" y="40" width="460" height="500" rx="8" fill="#b9a687"/><rect x="215" y="30" width="370" height="500" fill="#fff" stroke="#999" stroke-width="4"/><use href="#t" fill="#e8923a"/></svg><h2>Aufkleben</h2><p>Klebe es auf Karton.</p></section>
+<section class="card"><div class="n">3</div><svg viewBox="0 0 800 560"><use href="#t" fill="#e8923a"/><g transform="translate(560,300)"><path d="M0 0 L120 -60 M0 0 L120 60" stroke="#444" stroke-width="16" stroke-linecap="round"/><circle cx="-26" cy="-28" r="30" fill="none" stroke="#444" stroke-width="12"/><circle cx="-26" cy="28" r="30" fill="none" stroke="#444" stroke-width="12"/></g></svg><h2>Ausschneiden</h2><p>Schneide am Rand entlang.</p></section>
+<section class="card"><div class="n">4</div><svg viewBox="0 0 800 560"><path d="M300 250 Q290 470 310 520 L490 520 Q510 470 500 250 Z" fill="#c9b48e" stroke="#2b2a33" stroke-width="6"/><path d="M200 560 Q220 520 300 505" fill="none" stroke="#e8923a" stroke-width="16" stroke-linecap="round"/><rect x="270" y="470" width="130" height="50" rx="4" fill="#cfe9f5" stroke="#8cbcd6" stroke-width="4" opacity=".9" transform="rotate(-8 330 495)"/><text x="400" y="360" text-anchor="middle" font-size="44" fill="#6a5a3c">Rückseite</text></svg><h2>Festkleben</h2><p>Wollfaden hinten mit Tesafilm festkleben.</p></section>
+<section class="card"><div class="n">5</div><svg viewBox="0 0 800 560"><use href="#t" fill="#e8923a"/><g id="w"></g></svg><h2>Wickeln</h2><p>Eng nebeneinander. Kein Karton sichtbar.</p></section>
+</main>
+<footer><div class="box"><h3>Das brauchst du</h3><ul><li>Waldtier-Vorlage</li><li>Karton</li><li>Schere</li><li>Kleber</li><li>Tesafilm</li><li>Wolle</li><li>Stifte</li></ul></div>
+<div class="box tip"><h3>Tipp</h3>Nicht zu fest ziehen: dann wird es flauschig.</div></footer>
+<svg width="0" height="0" style="position:absolute"><defs><g id="t"><path d="M310 140 L330 70 L375 120 Q400 112 425 120 L470 70 L490 140 Q505 190 490 250 L310 250 Q295 190 310 140Z" stroke="#2b2a33" stroke-width="6"/><path d="M300 250 Q290 470 310 520 L490 520 Q510 470 500 250 Z" stroke="#2b2a33" stroke-width="6"/><path d="M330 215 Q400 170 470 215 L400 262Z" fill="#fff" stroke="#2b2a33" stroke-width="5"/><circle cx="360" cy="195" r="11" fill="#2b2a33"/><circle cx="440" cy="195" r="11" fill="#2b2a33"/><ellipse cx="400" cy="250" rx="12" ry="9" fill="#2b2a33"/></g></defs></svg>
+<script>let s='';for(let i=0;i<22;i++)s+=`<rect x="${292+(i%3)*2}" y="${512-i*11.5}" width="${216-(i%2)*4}" height="15" rx="7" fill="${i%2?'#d0602a':'#e0722f'}" stroke="#b04a1c" stroke-width="1.5"/>`;document.getElementById('w').innerHTML=s</script></html>
