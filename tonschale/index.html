@@ -1827,11 +1827,13 @@ const bisNaechstes = w =&gt; { const x = SCHWELLEN[Math.min(w.g.length + offen(w
 const geschenkIcon = &#x27;&lt;svg viewBox=&quot;0 0 48 48&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;rect x=&quot;7&quot; y=&quot;18&quot; width=&quot;34&quot; height=&quot;24&quot; rx=&quot;3&quot;/&gt;&lt;path d=&quot;M5 12h38v6H5zM24 12v30&quot;/&gt;&lt;path d=&quot;M24 12c-4-8-14-8-12-1 1 2 6 1 12 1zM24 12c4-8 14-8 12-1-1 2-6 1-12 1z&quot;/&gt;&lt;/svg&gt;&#x27;;
 let gaeste = [], gRuhe = 0, gNaechst = 25, evRuhe = 0, evNaechst = 35;
 function weltStein(n) { const w = wd(); w.gesamt += n; speichern(); weltZeigen(); if (welt() &amp;&amp; offen(w) &gt; 0) setTimeout(geschenkPruefen, 2600); }
+// Maxi 16.11.: immer zeigen, wann das Nächste passiert (Ei, Schlüpfen)
+const ereignisText = w =&gt; { const n = w.g.length, nx = n + 1; return nx &lt; 3 ? ` · Ei nach ${3 - n} Geschenken` : nx === 3 ? &#x27; · dann kommt das Ei!&#x27; : nx &lt; 6 ? ` · Ei schlüpft nach ${6 - n} Geschenken` : nx === 6 ? &#x27; · dann schlüpft der Babydrache!&#x27; : &#x27; · Babydrache wächst&#x27;; };
 function weltZeigen(neuK) {
   const sw = $(&#x27;#schildWelt&#x27;); if (!welt()) { sw.style.display = &#x27;none&#x27;; return; } sw.style.display = &#x27;&#x27;;
   const w = wd(), o = offen(w), rest = bisNaechstes(w);
   sw.classList.toggle(&#x27;wartet&#x27;, o &gt; 0);
-  sw.innerHTML = geschenkIcon + (o &gt; 0 ? &#x27;Ein Geschenk für den Drachen wartet!&#x27; : w.g.length &gt;= GESCHENKE.length ? &#x27;Höhle fertig eingerichtet&#x27; : `Nächstes Geschenk: noch ${rest} ${rest === 1 ? &#x27;Edelstein&#x27; : &#x27;Edelsteine&#x27;}`);
+  sw.innerHTML = geschenkIcon + (o &gt; 0 ? &#x27;Ein Geschenk für den Drachen wartet!&#x27; : w.g.length &gt;= GESCHENKE.length ? &#x27;Höhle fertig eingerichtet&#x27; : `Nächstes Geschenk: noch ${rest} ${rest === 1 ? &#x27;Edelstein&#x27; : &#x27;Edelsteine&#x27;}` + ereignisText(w));
   const h = $(&#x27;#szene .weltHinten&#x27;); if (!h) return;
   const m = jetzt().getMonth() + 1, saison = m &gt;= 9 &amp;&amp; m &lt;= 11 ? &#x27;laub&#x27; : m === 12 || m &lt;= 2 ? &#x27;schnee&#x27; : m &lt;= 5 ? &#x27;bluete&#x27; : &#x27;sommer&#x27;;
   const sz = $(&#x27;#szene .saison&#x27;); if (sz) sz.innerHTML = Array.from({length: 8}, (_, i) =&gt; { const x = W3 ? WELTMETA.punkte.eingang[0] - 100 + (i * 37) % 200 : 90 + (i * 37) % 250, d = (i * 0.9).toFixed(1);
