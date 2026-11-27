@@ -67,7 +67,7 @@ addEventListener('resize',passe);passe();
 const G=[...document.querySelectorAll('.g')],MO=document.getElementById('monster'),ZU=document.getElementById('zur'),V=document.getElementById('vid');let a=-1;
 function zurAn(){ZU.classList.toggle('an',a>=0||MO.classList.contains('gross')||document.getElementById('vbox').classList.contains('on'))}
 function zeig(i){G.forEach(g=>g.classList.remove('on'));a=(i>=0&&i<G.length)?i:-1;if(a>=0)G[a].classList.add('on');zurAn()}
-function mg(x){MO.classList.toggle('gross',x);zurAn()}
+const RE=document.querySelector('.rechts');function mg(x){if(x){BU.appendChild(MO)}else{RE.insertBefore(MO,RE.firstChild)}MO.classList.toggle('gross',x);zurAn()}
 function vid(x){document.getElementById('vbox').classList.toggle('on',x);if(x){V.currentTime=0;V.play()}else V.pause();zurAn()}
 function alleZu(){zeig(-1);mg(false);vid(false)}
 MO.querySelector('.deckel').onclick=()=>mg(true);
